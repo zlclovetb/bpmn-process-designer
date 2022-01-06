@@ -6,7 +6,9 @@ Vue.prototype.$axios = axios;
 
 // 加载基础ElementUI
 import ElementUI from "element-ui";
-Vue.use(ElementUI);
+import i18n from './i18n/index';
+import locale from 'element-ui/lib/locale/lang/en';
+Vue.use(ElementUI, { locale });
 import "../package/theme/element-variables.scss";
 
 import { vuePlugin } from "@/highlight";
@@ -24,5 +26,6 @@ import "bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css";
 // import "bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css"; // 右边工具栏样式
 
 new Vue({
+  i18n,
   render: h => h(App)
 }).$mount("#app");

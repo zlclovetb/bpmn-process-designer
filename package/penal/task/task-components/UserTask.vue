@@ -16,13 +16,14 @@
       </el-select>
     </el-form-item>
     <el-form-item label="到期时间">
-      <el-input v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')" />
+<!--      <el-input v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')" />-->
+      <el-date-picker v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')"/>
     </el-form-item>
-    <el-form-item label="跟踪时间">
+<!--    <el-form-item label="跟踪时间">
       <el-input v-model="userTaskForm.followUpDate" clearable @change="updateElementTask('followUpDate')" />
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item label="优先级">
-      <el-input v-model="userTaskForm.priority" clearable @change="updateElementTask('priority')" />
+      <el-input-number v-model="userTaskForm.priority" clearable @change="updateElementTask('priority')" />
     </el-form-item>
   </div>
 </template>

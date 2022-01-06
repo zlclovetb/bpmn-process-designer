@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <my-process-palette />
     <my-process-designer
       :key="`designer-${reloadIndex}`"
       v-model="xmlString"
@@ -11,50 +10,11 @@
       @init-finished="initModeler"
     />
     <my-properties-panel :key="`penal-${reloadIndex}`" :bpmn-modeler="modeler" :prefix="controlForm.prefix" class="process-panel" />
-
-    <!-- demo config -->
-    <div class="demo-control-bar">
-      <div class="open-control-dialog" @click="controlDrawerVisible = true"><i class="el-icon-setting"></i></div>
-    </div>
-    <el-drawer :visible.sync="controlDrawerVisible" size="400px" title="偏好设置" append-to-body destroy-on-close>
-      <el-form :model="controlForm" size="small" label-width="100px" class="control-form" @submit.native.prevent>
-        <el-form-item label="流程ID">
-          <el-input v-model="controlForm.processId" @change="reloadProcessDesigner" />
-        </el-form-item>
-        <el-form-item label="流程名称">
-          <el-input v-model="controlForm.processName" @change="reloadProcessDesigner" />
-        </el-form-item>
-        <el-form-item label="流转模拟">
-          <el-switch v-model="controlForm.simulation" inactive-text="停用" active-text="启用" @change="reloadProcessDesigner" />
-        </el-form-item>
-        <el-form-item label="禁用双击">
-          <el-switch v-model="controlForm.labelEditing" inactive-text="停用" active-text="启用" @change="changeLabelEditingStatus" />
-        </el-form-item>
-        <el-form-item label="隐藏label">
-          <el-switch v-model="controlForm.labelVisible" inactive-text="停用" active-text="启用" @change="changeLabelVisibleStatus" />
-        </el-form-item>
-        <el-form-item label="流程引擎">
-          <el-radio-group v-model="controlForm.prefix" @change="reloadProcessDesigner(true)">
-            <el-radio label="camunda">camunda</el-radio>
-            <el-radio label="flowable">flowable</el-radio>
-            <el-radio label="activiti">activiti</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="工具栏">
-          <el-radio-group v-model="controlForm.headerButtonSize">
-            <el-radio label="mini">mini</el-radio>
-            <el-radio label="small">small</el-radio>
-            <el-radio label="medium">medium</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-    </el-drawer>
-
-    <div class="info-tip">
-      <p>注：activiti 好像不支持表单配置，控制台可能会报错</p>
-      <p>更多配置请查看源码：<a href="https://github.com/miyuesc/bpmn-process-designer">MiyueSC/bpmn-process-designer</a></p>
-      <p>疑问请在此留言：<a href="https://github.com/miyuesc/bpmn-process-designer/issues/16">MiyueSC/bpmn-process-designer/issues</a></p>
-    </div>
+<!--    <el-select v-model="langType" class="changeLangType" size="mini" @change="switchLang">
+      <el-option value="en" label="English"></el-option>
+      <el-option value="zh" label="中文简体"></el-option>
+      <el-option value="tc" label="中文繁體"></el-option>
+    </el-select>-->
   </div>
 </template>
 
@@ -69,7 +29,6 @@ import CustomContentPadProvider from "../package/designer/plugins/content-pad";
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
 import CustomPaletteProvider from "../package/designer/plugins/palette";
 import xmlObj2json from "./utils/xml2json";
-import MyProcessPalette from "../package/palette/ProcessPalette";
 import { getNewCustomShapePosition } from "./modules/auto-place/CustomAutoPlace";
 import Log from "../package/Log";
 // 自定义侧边栏
@@ -77,7 +36,7 @@ import Log from "../package/Log";
 
 export default {
   name: "App",
-  components: { MyProcessPalette },
+  components: { },
   data() {
     return {
       xmlString: "",
@@ -99,7 +58,8 @@ export default {
       addis: {
         CustomContentPadProvider,
         CustomPaletteProvider
-      }
+      },
+      langType: ""
     };
   },
   created() {},
@@ -166,6 +126,9 @@ export default {
       //     this.elementOverlayIds[element.id] = null;
       //   }
       // });
+    },
+    switchLang(val){
+      this.$i18n.locale=val;//此处val为 zh 或者 en
     }
   }
 };
@@ -182,25 +145,7 @@ body {
   height: 100%;
   box-sizing: border-box;
   display: inline-grid;
-  grid-template-columns: 100px auto max-content;
-}
-.demo-control-bar {
-  position: fixed;
-  right: 8px;
-  bottom: 8px;
-  z-index: 1;
-  .open-control-dialog {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 32px;
-    background: rgba(64, 158, 255, 1);
-    color: #ffffff;
-    cursor: pointer;
-  }
+  grid-template-columns: auto max-content;
 }
 .info-tip {
   position: fixed;

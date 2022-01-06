@@ -2,7 +2,7 @@
   <div class="process-panel__container" :style="{ width: `${this.width}px` }">
     <el-collapse v-model="activeTab">
       <el-collapse-item name="base">
-        <div slot="title" class="panel-tab__title"><i class="el-icon-info"></i>常规</div>
+        <div slot="title" class="panel-tab__title"><i class="el-icon-info"></i>{{$t('common.conventional')}}</div>
         <element-base-info :id-edit-disabled="idEditDisabled" :business-object="elementBusinessObject" :type="elementType" />
       </el-collapse-item>
       <el-collapse-item name="condition" v-if="elementType === 'Process'" key="message">
@@ -12,10 +12,6 @@
       <el-collapse-item name="condition" v-if="conditionFormVisible" key="condition">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-promotion"></i>流转条件</div>
         <flow-condition :business-object="elementBusinessObject" :type="elementType" />
-      </el-collapse-item>
-      <el-collapse-item name="condition" v-if="formVisible" key="form">
-        <div slot="title" class="panel-tab__title"><i class="el-icon-s-order"></i>表单</div>
-        <element-form :id="elementId" :type="elementType" />
       </el-collapse-item>
       <el-collapse-item name="task" v-if="elementType.indexOf('Task') !== -1" key="task">
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-claim"></i>任务</div>
@@ -37,8 +33,12 @@
         <div slot="title" class="panel-tab__title"><i class="el-icon-circle-plus"></i>扩展属性</div>
         <element-properties :id="elementId" :type="elementType" />
       </el-collapse-item>
+      <el-collapse-item name="condition" v-if="formVisible" key="form">
+        <div slot="title" class="panel-tab__title"><i class="el-icon-s-order"></i>表单</div>
+        <element-form :id="elementId" :type="elementType" />
+      </el-collapse-item>
       <el-collapse-item name="other" key="other">
-        <div slot="title" class="panel-tab__title"><i class="el-icon-s-promotion"></i>其他</div>
+        <div slot="title" class="panel-tab__title"><i class="el-icon-s-promotion"></i>描述信息</div>
         <element-other-config :id="elementId" />
       </el-collapse-item>
     </el-collapse>
@@ -100,7 +100,7 @@ export default {
   },
   data() {
     return {
-      activeTab: "base",
+      activeTab: ["base", "task"],
       elementId: "",
       elementType: "",
       elementBusinessObject: {}, // 元素 businessObject 镜像，提供给需要做判断的组件使用
@@ -111,7 +111,7 @@ export default {
   watch: {
     elementId: {
       handler() {
-        this.activeTab = "base";
+        this.activeTab = ["base", "task"];
       }
     }
   },
