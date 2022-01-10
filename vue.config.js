@@ -24,7 +24,7 @@ const CDN = {
 module.exports = {
   publicPath: IS_PROD ? "././" : "/", // 打包相对路径
   productionSourceMap: false,
-  devServer: {
+  /*devServer: {
     port: 8100,
     proxy: {
       "^/user/": {
@@ -35,7 +35,7 @@ module.exports = {
         }
       }
     }
-  },
+  },*/
   chainWebpack: config => {
     // if (process.env.NODE_ENV === 'production') {
     //   // 清除css，js版本号

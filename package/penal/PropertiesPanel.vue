@@ -1,5 +1,10 @@
 <template>
-  <div class="process-panel__container" :style="{ width: `${this.width}px` }">
+  <div class="process-panel__container" :style="{ width: `${this.width}px` }" :class="[this.isDrawer?'show':'hide']">
+    <div :title="[this.isDrawer?'收起':'展开']" class="process-properties-bar">
+      <div class="open-properties-handel" @click='changeDrawerShow'>
+        <i :class="[this.isDrawer?'el-icon-caret-right':'el-icon-caret-left']"></i>
+      </div>
+    </div>
     <el-collapse v-model="activeTab">
       <el-collapse-item name="base">
         <div slot="title" class="panel-tab__title"><i class="el-icon-info"></i>{{$t('common.conventional')}}</div>
@@ -105,7 +110,9 @@ export default {
       elementType: "",
       elementBusinessObject: {}, // 元素 businessObject 镜像，提供给需要做判断的组件使用
       conditionFormVisible: false, // 流转条件设置
-      formVisible: false // 表单配置
+      formVisible: false, // 表单配置
+      isDrawer: true,
+      direction: 'rtl'
     };
   },
   watch: {
@@ -179,6 +186,9 @@ export default {
         activatedElement.source.type.indexOf("StartEvent") === -1
       );
       this.formVisible = this.elementType === "UserTask" || this.elementType === "StartEvent";
+    },
+    changeDrawerShow() {
+      this.isDrawer = !this.isDrawer;//取反
     },
     beforeDestroy() {
       window.bpmnInstances = null;

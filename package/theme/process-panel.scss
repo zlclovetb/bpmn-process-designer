@@ -6,6 +6,46 @@
   max-height: 100%;
   overflow-y: scroll;
 }
+
+.process-panel__container.hide {
+  width: 34px !important;
+  overflow: hidden;
+}
+
+.process-panel__container.hide .process-properties-bar {
+  position: fixed;
+  height: 100%;
+  box-sizing: border-box;
+  display: block;
+  background: white;
+  width: 34px;
+  text-align: left;
+  line-height: 40px;
+  z-index: 999999;
+  right: 0;
+}
+
+.process-properties-bar {
+  width: 34px;
+}
+
+.process-panel__container.show .open-properties-handel {
+  width: 40px;
+  line-height: 40px;
+}
+
+.open-properties-handel {
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+  color: #606266;
+}
+
+.process-panel__container.show .el-collapse {
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
 .panel-tab__title {
   font-weight: 600;
   padding: 0 8px;

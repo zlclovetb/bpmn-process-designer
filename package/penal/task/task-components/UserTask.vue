@@ -2,7 +2,7 @@
   <div style="margin-top: 16px">
     <el-form-item label="处理用户">
       <el-select v-model="userTaskForm.assignee" @change="updateElementTask('assignee')">
-        <el-option v-for="ak in mockData" :key="'ass-' + ak" :label="`用户${ak}`" :value="`user${ak}`" />
+        <el-option v-for="(user,i) in userData" :key="'ass-' + i" :label="`${user.username}`" :value="`${user.userId}`" />
       </el-select>
     </el-form-item>
     <el-form-item label="候选用户">
@@ -16,10 +16,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="到期时间">
-<!--      <el-input v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')" />-->
-      <el-date-picker v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')"/>
+      <!--      <el-input v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')" />-->
+      <el-date-picker v-model="userTaskForm.dueDate" clearable @change="updateElementTask('dueDate')" />
     </el-form-item>
-<!--    <el-form-item label="跟踪时间">
+    <!--    <el-form-item label="跟踪时间">
       <el-input v-model="userTaskForm.followUpDate" clearable @change="updateElementTask('followUpDate')" />
     </el-form-item>-->
     <el-form-item label="优先级">
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "UserTask",
   props: {
@@ -46,7 +47,8 @@ export default {
         priority: ""
       },
       userTaskForm: {},
-      mockData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      mockData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      userData: []
     };
   },
   watch: {
@@ -57,6 +59,9 @@ export default {
         this.$nextTick(() => this.resetTaskForm());
       }
     }
+  },
+  mounted(){
+    this.getUserList();
   },
   methods: {
     resetTaskForm() {
@@ -78,6 +83,17 @@ export default {
         taskAttr[key] = this.userTaskForm[key] || null;
       }
       window.bpmnInstances.modeling.updateProperties(this.bpmnElement, taskAttr);
+    },
+    getUserList() {
+      this.$axios.get('/api/user/list')
+      .then(e => {
+        let data = e.data
+        if (data.data && Array.isArray(data.data)) {
+          this.userData = data.data
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   beforeDestroy() {
