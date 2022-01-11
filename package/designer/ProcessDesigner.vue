@@ -4,6 +4,7 @@
       <slot name="control-header"></slot>
       <template v-if="!$slots['control-header']">
         <el-button-group key="file-control">
+          <!--
           <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-folder-opened" @click="$refs.refFile.click()">打开文件</el-button>
           <el-tooltip effect="light">
             <div slot="content">
@@ -15,6 +16,8 @@
             </div>
             <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-download">下载文件</el-button>
           </el-tooltip>
+          -->
+          <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-upload" @click="saveProcessAsBpmn">保存</el-button>
           <el-tooltip effect="light">
             <div slot="content">
               <el-button :size="headerButtonSize" type="text" @click="previewProcessXML">预览XML</el-button>
@@ -340,6 +343,16 @@ export default {
       }
     },
 
+    // 上传流程图到后端
+    async saveProcessBpmn() {
+      try {
+        const _this = this;
+
+      } catch (e) {
+        console.error(`[Process Designer Warn ]: ${e.message || e}`);
+      }
+    },
+
     // 根据所需类型进行转码并返回下载地址
     setEncoded(type, filename = "diagram", data) {
       const encodedData = encodeURIComponent(data);
@@ -370,6 +383,9 @@ export default {
     },
     downloadProcessAsSvg() {
       this.downloadProcess("svg");
+    },
+    saveProcessAsBpmn(){
+      this.saveProcessBpmn();
     },
     processSimulation() {
       this.simulationStatus = !this.simulationStatus;
