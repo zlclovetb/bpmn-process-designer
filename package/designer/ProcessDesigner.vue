@@ -4,6 +4,7 @@
       <slot name="control-header"></slot>
       <template v-if="!$slots['control-header']">
         <el-button-group key="file-control">
+          <!--
           <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-folder-opened" @click="$refs.refFile.click()">打开文件</el-button>
           <el-tooltip effect="light">
             <div slot="content">
@@ -15,6 +16,8 @@
             </div>
             <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-download">下载文件</el-button>
           </el-tooltip>
+          -->
+          <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-upload" @click="saveProcessAsBpmn">保存</el-button>
           <el-tooltip effect="light">
             <div slot="content">
               <el-button :size="headerButtonSize" type="text" @click="previewProcessXML">预览XML</el-button>
@@ -104,7 +107,7 @@ import camundaModdleExtension from "./plugins/extension-moddle/camunda";
 import activitiModdleExtension from "./plugins/extension-moddle/activiti";
 import flowableModdleExtension from "./plugins/extension-moddle/flowable";
 // 引入json转换与高亮
-import convert from "xml-js";
+import X2JS from "x2js";
 
 export default {
   name: "MyProcessDesigner",
@@ -340,6 +343,16 @@ export default {
       }
     },
 
+    // 上传流程图到后端
+    async saveProcessBpmn() {
+      try {
+        const _this = this;
+
+      } catch (e) {
+        console.error(`[Process Designer Warn ]: ${e.message || e}`);
+      }
+    },
+
     // 根据所需类型进行转码并返回下载地址
     setEncoded(type, filename = "diagram", data) {
       const encodedData = encodeURIComponent(data);
@@ -370,6 +383,9 @@ export default {
     },
     downloadProcessAsSvg() {
       this.downloadProcess("svg");
+    },
+    saveProcessAsBpmn(){
+      this.saveProcessBpmn();
     },
     processSimulation() {
       this.simulationStatus = !this.simulationStatus;
@@ -439,8 +455,15 @@ export default {
       });
     },
     previewProcessJson() {
+      const newConvert = new X2JS();
       this.bpmnModeler.saveXML({ format: true }).then(({ xml }) => {
-        this.previewResult = convert.xml2json(xml, { spaces: 2 });
+        const { definitions } = newConvert.xml2js(xml);
+        if (definitions) {
+          this.previewResult = JSON.stringify(definitions, null, 4);
+        } else {
+          this.previewResult = "";
+        }
+
         this.previewType = "json";
         this.previewModelVisible = true;
       });

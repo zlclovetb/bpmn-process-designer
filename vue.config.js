@@ -1,5 +1,6 @@
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const IS_PROD = process.env.NODE_ENV === "production";
 
@@ -11,11 +12,13 @@ const CDN = {
   externals: {
     vue: "Vue",
     "element-ui": "ELEMENT",
+    x2js: "X2JS",
     "bpmn-js/lib/Modeler": "BpmnJS"
   },
   css: [],
   js: [
-    "https://unpkg.com/bpmn-js@^7.4.0/dist/bpmn-modeler.development.js",
+    "https://unpkg.com/bpmn-js@8.8.3/dist/bpmn-modeler.production.min.js",
+    "https://unpkg.com/x2js@3.4.2/dist/x2js.min.js",
     "https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js",
     "https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/index.min.js"
   ]
@@ -95,6 +98,16 @@ module.exports = {
 
       // 代码混淆
       config.plugins.push(new TerserPlugin());
+      config.plugins.push(
+        new CompressionPlugin({
+          algorithm: "gzip", // 使用gzip压缩
+          test: /\.js$|\.html$|\.css$/, // 匹配文件名
+          // filename: "[path].gz", // 压缩后的文件名(保持原文件名，后缀加.gz)
+          minRatio: 1, // 压缩率小于1才会压缩
+          threshold: 10240, // 对超过10k的数据压缩
+          deleteOriginalAssets: false // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
+        })
+      );
     }
   }
 };
