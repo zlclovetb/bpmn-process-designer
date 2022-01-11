@@ -220,7 +220,9 @@ export default {
       window.bpmnInstances.modeling.updateProperties(this.bpmnELement, { formKey: this.formKey });
     },
     updateElementBusinessKey() {
-      window.bpmnInstances.modeling.updateModdleProperties(this.bpmnELement, this.formData, { businessKey: this.businessKey });
+      window.bpmnInstances.modeling.updateModdleProperties(this.bpmnELement, this.formData, {
+        businessKey: this.businessKey
+      });
     },
     // 根据类型调整字段type
     changeFieldTypeType(type) {
@@ -300,14 +302,18 @@ export default {
         const fieldPropertyList = this.fieldPropertiesList.map(fp => {
           return window.bpmnInstances.moddle.create(`${this.prefix}:Property`, { id: fp.id, value: fp.value });
         });
-        Field.properties = window.bpmnInstances.moddle.create(`${this.prefix}:Properties`, { values: fieldPropertyList });
+        Field.properties = window.bpmnInstances.moddle.create(`${this.prefix}:Properties`, {
+          values: fieldPropertyList
+        });
       }
       // 构建校验规则
       if (this.fieldConstraintsList && this.fieldConstraintsList.length) {
         const fieldConstraintList = this.fieldConstraintsList.map(fc => {
           return window.bpmnInstances.moddle.create(`${this.prefix}:Constraint`, { name: fc.name, config: fc.config });
         });
-        Field.validation = window.bpmnInstances.moddle.create(`${this.prefix}:Validation`, { constraints: fieldConstraintList });
+        Field.validation = window.bpmnInstances.moddle.create(`${this.prefix}:Validation`, {
+          constraints: fieldConstraintList
+        });
       }
       // 构建枚举值
       if (this.fieldEnumList && this.fieldEnumList.length) {

@@ -213,7 +213,10 @@ export default {
         this.editingListenerIndex = -1; // 标记为新增
       }
       if (listener && listener.fields) {
-        this.fieldsListOfListener = listener.fields.map(field => ({ ...field, fieldType: field.string ? "string" : "expression" }));
+        this.fieldsListOfListener = listener.fields.map(field => ({
+          ...field,
+          fieldType: field.string ? "string" : "expression"
+        }));
       } else {
         this.fieldsListOfListener = [];
         this.$set(this.listenerForm, "fields", []);
