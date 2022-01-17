@@ -2,6 +2,10 @@
   <div id="app">
     <my-process-designer
       :key="`designer-${reloadIndex}`"
+      :options="{
+        taskResizingEnabled: true,
+        eventResizingEnabled: true
+      }"
       v-model="xmlString"
       v-bind="controlForm"
       keyboard
@@ -22,6 +26,8 @@ import CustomContentPadProvider from "../package/designer/plugins/content-pad";
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
 import CustomPaletteProvider from "../package/designer/plugins/palette";
 import Log from "../package/Log";
+// 任务resize
+import resizeTask from "bpmn-js-task-resize/lib";
 
 export default {
   name: "App",
@@ -42,7 +48,7 @@ export default {
         prefix: "flowable",
         headerButtonSize: "mini",
         // additionalModel: []
-        additionalModel: [CustomContentPadProvider, CustomPaletteProvider]
+        additionalModel: [CustomContentPadProvider, CustomPaletteProvider, resizeTask]
       },
       addis: {
         CustomContentPadProvider,
