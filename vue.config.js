@@ -91,6 +91,12 @@ module.exports = {
     });
   },
   configureWebpack: config => {
+    config.module.rules.push({
+      test: /\.bpmnlintrc$/,
+      use: [{
+        loader: 'bpmnlint-loader'
+      }]
+    });
     // 生产环境相关配置
     if (IS_PROD) {
       // cdn

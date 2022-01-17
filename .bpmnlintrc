@@ -1,0 +1,10 @@
+{
+  "extends": [
+      "bpmnlint:recommended",
+      "plugin:example/all"
+    ],
+  "rules": {
+      "label-required": "off",
+      "example/no-manual-task": "warn"
+    }
+}

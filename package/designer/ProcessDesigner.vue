@@ -31,6 +31,7 @@
               模拟
             </el-button>
           </el-tooltip>
+          <el-button :size="headerButtonSize" :type="headerButtonType" icon="el-icon-upload" @click="validateProcess">验证</el-button>
         </el-button-group>
         <el-button-group key="align-control">
           <el-tooltip effect="light" content="向左对齐">
@@ -89,6 +90,10 @@
 </template>
 
 <script>
+import lintModule from 'bpmn-js-bpmnlint';
+import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
+import bpmnlintConfig from '../../.bpmnlintrc';
+
 import BpmnModeler from "bpmn-js/lib/Modeler";
 import DefaultEmptyXML from "./plugins/defaultEmpty";
 // 翻译方法
@@ -208,6 +213,7 @@ export default {
         Modules.push(activitiModdleExtension);
       }
 
+      Modules.push(lintModule);
       return Modules;
     },
     moddleExtensions() {
@@ -254,7 +260,10 @@ export default {
         container: this.$refs["bpmn-canvas"],
         keyboard: this.keyboard ? { bindTo: document } : null,
         additionalModules: this.additionalModules,
-        moddleExtensions: this.moddleExtensions
+        moddleExtensions: this.moddleExtensions,
+        linting: {
+          bpmnlint: bpmnlintConfig
+        }
       });
       this.$emit("init-finished", this.bpmnModeler);
       this.initModelListeners();
@@ -467,6 +476,9 @@ export default {
         this.previewType = "json";
         this.previewModelVisible = true;
       });
+    },
+    validateProcess() {
+      this.bpmnModeler.get('linting').toggle()
     }
   }
 };
