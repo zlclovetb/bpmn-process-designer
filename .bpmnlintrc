@@ -1,10 +1,11 @@
 {
   "extends": [
-      "bpmnlint:recommended",
-      "plugin:example/all"
-    ],
+    "bpmnlint:recommended",
+    "plugin:local/recommended"
+  ],
   "rules": {
-      "label-required": "off",
-      "example/no-manual-task": "warn"
-    }
+    "label-required": "warn",
+    "local/no-manual-task": "warn",
+    "local/no-node-users": "error"
+  }
 }
