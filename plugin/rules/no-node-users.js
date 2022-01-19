@@ -14,7 +14,7 @@ module.exports = function() {
           return is(e, 'flowable:CustomProperties')
         })
         if (!findValue(properties, 'findUserType')) {
-          reporter.report(node.id, '员工节点未设置节点人员!')
+          reporter.report(node.id, 'The employee node has no node personnel set!')
         }
       }
     }

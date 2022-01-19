@@ -26,10 +26,16 @@ import "bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css";
 // import "bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css"; // 右边工具栏样式
 
 if(process.env.NODE_ENV == "development"){
-  require('./mock.js');
+  axios.defaults.baseURL = '';
+  require('./mock');
+} else {
+  axios.defaults.baseURL = '/Spring/';
 }
 
 new Vue({
   i18n,
   render: h => h(App)
 }).$mount("#app");
+
+
+

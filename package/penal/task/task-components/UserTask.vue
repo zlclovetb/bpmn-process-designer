@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "UserTask",
   props: {
@@ -85,7 +84,7 @@ export default {
       window.bpmnInstances.modeling.updateProperties(this.bpmnElement, taskAttr);
     },
     getUserList() {
-      this.$axios.get('/api/user/list')
+      this.$axios.get('/user/list')
       .then(e => {
         let data = e.data
         if (data.data && Array.isArray(data.data)) {

@@ -30,11 +30,12 @@ module.exports = {
   /*devServer: {
     port: 8100,
     proxy: {
-      "^/user/": {
-        target: "http://localhost:3000/user",
+      "^/api/user/": {
+        target: "http://localhost:8080/Spring/api/user",
         changeOrigin: true, //是否允许跨域
+        ws: true,
         pathRewrite: {
-          "^/user": "/"
+          "^/api/user": "/"
         }
       }
     }
