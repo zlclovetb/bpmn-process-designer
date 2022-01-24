@@ -29,7 +29,7 @@ if(process.env.NODE_ENV == "development"){
   axios.defaults.baseURL = '';
   require('./mock');
 } else {
-  axios.defaults.baseURL = '/Spring/';
+  axios.defaults.baseURL = '/Spring/api/';
 }
 
 new Vue({

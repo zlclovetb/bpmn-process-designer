@@ -10,7 +10,10 @@
         />
       </el-form-item>
       <el-form-item label="名称">
-        <el-input v-model="elementBaseInfo.name" clearable @change="updateBaseInfo('name')" />
+        <el-input v-model="elementBaseInfo.name"
+          :disabled="idEditDisabled || elementBaseInfo.$type === 'bpmn:Process'"
+          clearable
+          @change="updateBaseInfo('name')" />
       </el-form-item>
       <!--流程的基础属性-->
       <template v-if="elementBaseInfo.$type === 'bpmn:Process'">

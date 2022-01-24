@@ -28,6 +28,7 @@ import CustomPaletteProvider from "../package/designer/plugins/palette";
 import Log from "../package/Log";
 // 任务resize
 import resizeTask from "bpmn-js-task-resize/lib";
+import bpmnParams from './tools/getUrl';
 
 export default {
   name: "App",
@@ -40,8 +41,8 @@ export default {
       controlDrawerVisible: false,
       translationsSelf: translations,
       controlForm: {
-        processId: "",
-        processName: "",
+        processId: "" + bpmnParams.processId,
+        processName: bpmnParams.processName,
         simulation: true,
         labelEditing: false,
         labelVisible: false,

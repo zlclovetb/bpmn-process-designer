@@ -1,18 +1,18 @@
 <template>
   <div style="margin-top: 16px">
     <el-form-item label="处理用户">
-      <el-select v-model="userTaskForm.assignee" @change="updateElementTask('assignee')">
+      <el-select v-model="userTaskForm.assignee" clearable @change="updateElementTask('assignee')">
         <el-option v-for="(user,i) in userData" :key="'ass-' + i" :label="`${user.username}`" :value="`${user.userId}`" />
       </el-select>
     </el-form-item>
     <el-form-item label="候选用户">
       <el-select v-model="userTaskForm.candidateUsers" multiple collapse-tags @change="updateElementTask('candidateUsers')">
-        <el-option v-for="uk in mockData" :key="'user-' + uk" :label="`用户${uk}`" :value="`user${uk}`" />
+        <el-option v-for="(user,i) in userData" :key="'ass-' + i" :label="`${user.username}`" :value="`${user.userId}`" />
       </el-select>
     </el-form-item>
     <el-form-item label="候选分组">
       <el-select v-model="userTaskForm.candidateGroups" multiple collapse-tags @change="updateElementTask('candidateGroups')">
-        <el-option v-for="gk in mockData" :key="'ass-' + gk" :label="`分组${gk}`" :value="`group${gk}`" />
+        <el-option v-for="(group,i) in groupData" :key="'ass-' + i" :label="`${group.username}`" :value="`${group.groupId}`" />
       </el-select>
     </el-form-item>
     <el-form-item label="到期时间">
@@ -46,8 +46,8 @@ export default {
         priority: ""
       },
       userTaskForm: {},
-      mockData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      userData: []
+      userData: [],
+      groupData: []
     };
   },
   watch: {
@@ -61,6 +61,7 @@ export default {
   },
   mounted(){
     this.getUserList();
+    this.getGroupList();
   },
   methods: {
     resetTaskForm() {
@@ -89,6 +90,17 @@ export default {
         let data = e.data
         if (data.data && Array.isArray(data.data)) {
           this.userData = data.data
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getGroupList() {
+      this.$axios.get('/group/list')
+      .then(e => {
+        let data = e.data
+        if (data.data && Array.isArray(data.data)) {
+          this.groupData = data.data
         }
       }).catch(err => {
         console.log(err)

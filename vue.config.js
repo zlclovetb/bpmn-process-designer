@@ -25,7 +25,7 @@ const CDN = {
 };
 
 module.exports = {
-  publicPath: IS_PROD ? "././" : "/", // 打包相对路径
+  publicPath: IS_PROD ? "./" : "/", // 打包相对路径
   productionSourceMap: false,
   /*devServer: {
     port: 8100,

@@ -113,6 +113,7 @@ import activitiModdleExtension from "./plugins/extension-moddle/activiti";
 import flowableModdleExtension from "./plugins/extension-moddle/flowable";
 // 引入json转换与高亮
 import X2JS from "x2js";
+import axios from "axios";
 
 export default {
   name: "MyProcessDesigner",
@@ -357,11 +358,37 @@ export default {
       }
     },
 
+    async initProcessBpmn () {
+      const that = this
+      return new Promise(resolve => {
+        setTimeout(() => {
+          //const url = ''
+          //const url = 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/mock1.bpmn'
+          const url = '/manage/'+that.deploymentId+'/init'
+          resolve(url)
+        }, 1000)
+      })
+    },
+
     // 上传流程图到后端
     async saveProcessBpmn() {
       try {
         const _this = this;
-
+        this.bpmnModeler.saveSVG(function(err, svg) {
+          if (!err) {
+            _this.bpmnModeler.saveXML({format: true}, function(err2, xml) {
+              if (!err2) {
+                axios.post('/bpmn/save', {
+                  svgStr: svg,
+                  xmlStr: xml,
+                  modelKey: _this.processId
+                }).then((res) => {
+                  console.log(res)
+                })
+              }
+            })
+          }
+        })
       } catch (e) {
         console.error(`[Process Designer Warn ]: ${e.message || e}`);
       }
