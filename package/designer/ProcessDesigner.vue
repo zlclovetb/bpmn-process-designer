@@ -251,6 +251,7 @@ export default {
   },
   mounted() {
     this.initBpmnModeler();
+    this.value = this.getProcessXml()
     this.createNewDiagram(this.value);
     this.$once("hook:beforeDestroy", () => {
       if (this.bpmnModeler) this.bpmnModeler.destroy();
@@ -358,13 +359,11 @@ export default {
       }
     },
 
-    async initProcessBpmn () {
-      const that = this
+    async getProcessXml () {
+      const _this = this
       return new Promise(resolve => {
         setTimeout(() => {
-          //const url = ''
-          //const url = 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/mock1.bpmn'
-          const url = '/manage/'+that.deploymentId+'/init'
+          const url = '/bpmn/init/' + _this.processId;
           resolve(url)
         }, 1000)
       })
