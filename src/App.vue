@@ -41,7 +41,7 @@ export default {
       controlDrawerVisible: false,
       translationsSelf: translations,
       controlForm: {
-        processId: "" + bpmnParams.processId,
+        processId: bpmnParams.processId,
         processName: bpmnParams.processName,
         simulation: true,
         labelEditing: false,

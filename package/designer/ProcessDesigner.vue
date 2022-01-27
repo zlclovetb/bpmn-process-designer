@@ -172,7 +172,8 @@ export default {
       previewResult: "",
       previewType: "xml",
       recoverable: false,
-      revocable: false
+      revocable: false,
+      xmlUrl: ''
     };
   },
   computed: {
@@ -250,21 +251,27 @@ export default {
     }
   },
   mounted() {
-    this.initBpmnModeler();
-    this.value = this.getProcessXml()
-    this.createNewDiagram(this.value);
-    this.$once("hook:beforeDestroy", () => {
-      if (this.bpmnModeler) this.bpmnModeler.destroy();
-      this.$emit("destroy", this.bpmnModeler);
-      this.bpmnModeler = null;
-    });
+    this.init();
   },
   methods: {
-    initBpmnModeler() {
+    async init() {
+      this.xmlUrl = await this.getProcessXmlUrl();
+      // 等待 DOM 更新之后再对工作流进行初始化
+      this.$nextTick(() => {
+        this.initBpmnModeler();
+        this.createNewDiagram(this.value);
+        this.$once("hook:beforeDestroy", () => {
+          if (this.bpmnModeler) this.bpmnModeler.destroy();
+          this.$emit("destroy", this.bpmnModeler);
+          this.bpmnModeler = null;
+        });
+      })
+    },
+    async initBpmnModeler() {
       if (this.bpmnModeler) return;
       this.bpmnModeler = new BpmnModeler({
         container: this.$refs["bpmn-canvas"],
-        keyboard: this.keyboard ? { bindTo: document } : null,
+        keyboard: this.keyboard ? {bindTo: document} : null,
         additionalModules: this.additionalModules,
         moddleExtensions: this.moddleExtensions,
         ...this.options,
@@ -308,10 +315,22 @@ export default {
     },
     /* 创建新的流程图 */
     async createNewDiagram(xml) {
+      const _that = this
       // 将字符串转换成图显示出来
       let newId = this.processId || `Process_${new Date().getTime()}`;
       let newName = this.processName || `业务流程_${new Date().getTime()}`;
-      let xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
+      let xmlString = '';
+      if(this.xmlUrl === ''){
+        xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
+      } else {
+        let res = await axios({
+          method: 'get',
+          timeout: 10000,
+          url: _that.xmlUrl,
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        xmlString = res['data'];
+      }
       try {
         let { warnings } = await this.bpmnModeler.importXML(xmlString);
         if (warnings && warnings.length) {
@@ -359,11 +378,12 @@ export default {
       }
     },
 
-    async getProcessXml () {
+    async getProcessXmlUrl () {
       const _this = this
       return new Promise(resolve => {
         setTimeout(() => {
           const url = '/bpmn/init/' + _this.processId;
+          //const url = 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmnMock.bpmn';
           resolve(url)
         }, 1000)
       })
