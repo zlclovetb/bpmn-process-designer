@@ -402,7 +402,12 @@ export default {
                   xmlStr: xml,
                   modelKey: _this.processId
                 }).then((res) => {
-                  console.log(res)
+                  if(res.data.code === 0){
+                    _this.$message.success(res.data.msg);
+                  } else {
+                    _this.$message.error(res.data.msg);
+                  }
+                  //console.log(res.data.msg)
                 })
               }
             })
