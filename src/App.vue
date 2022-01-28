@@ -63,11 +63,13 @@ export default {
     initModeler(modeler) {
       setTimeout(() => {
         this.modeler = modeler;
-        const canvas = modeler.get("canvas");
-        const rootElement = canvas.getRootElement();
-        Log.prettyPrimary("Process Id:", rootElement.id);
-        Log.prettyPrimary("Process Name:", rootElement.businessObject.name);
-      }, 10);
+        if(this.modeler){
+          const canvas = modeler.get("canvas");
+          const rootElement = canvas.getRootElement();
+          Log.prettyPrimary("Process Id:", rootElement.id);
+          Log.prettyPrimary("Process Name:", rootElement.businessObject.name);
+        }
+      }, 100);
     },
     reloadProcessDesigner(deep) {
       this.controlForm.additionalModel = [];

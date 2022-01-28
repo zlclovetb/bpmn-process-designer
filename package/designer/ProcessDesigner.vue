@@ -323,13 +323,19 @@ export default {
       if(this.xmlUrl === ''){
         xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
       } else {
-        let res = await axios({
-          method: 'get',
-          timeout: 10000,
-          url: _that.xmlUrl,
+        await axios.get(_that.xmlUrl,{
+          timeout: 500,
           headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((res) => {
+          if(res.data.code === 0){
+            xmlString = res['data'];
+          } else {
+            xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
+          }
+        }).catch((err) => {
+          xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
+          console.log(err);
         });
-        xmlString = res['data'];
       }
       try {
         let { warnings } = await this.bpmnModeler.importXML(xmlString);

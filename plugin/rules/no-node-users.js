@@ -7,15 +7,12 @@ const find = require('lodash/find')
 module.exports = function() {
   function check(node, reporter) {
     if (is(node, 'bpmn:UserTask')) {
-      var extensionElements = node.extensionElements
+      const assignee = (node.assignee || '').trim();
+      const candidateUsers = (node.candidateUsers || '').trim();
+      const candidateGroups = (node.candidateGroups || '').trim();
 
-      if (extensionElements) {
-        var properties = find(extensionElements.get('values'), function(e) {
-          return is(e, 'flowable:CustomProperties')
-        })
-        if (!findValue(properties, 'findUserType')) {
-          reporter.report(node.id, 'The employee node has no node personnel set!')
-        }
+      if (assignee.length === 0 && candidateUsers.length === 0 && candidateGroups.length === 0) {
+        reporter.report(node.id, 'The employee node has no node personnel set!');
       }
     }
   }
